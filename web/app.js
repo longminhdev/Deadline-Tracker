@@ -24,7 +24,6 @@ const elements = {
   citdCount: document.querySelector('#citd-count'),
   openItemsCount: document.querySelector('#open-items-count'),
   completedItemsCount: document.querySelector('#completed-items-count'),
-  completedSection: document.querySelector('#completed-section'),
   overdueCount: document.querySelector('#overdue-count'),
   urgentCount: document.querySelector('#urgent-count'),
   openCount: document.querySelector('#open-count'),
@@ -213,7 +212,6 @@ function render() {
   elements.citdCount.textContent = visible.length;
   elements.openItemsCount.textContent = visibleOpenItems.length;
   elements.completedItemsCount.textContent = completedItems.length;
-  if (state.filter !== 'ALL') elements.completedSection.open = completedItems.length > 0;
   renderList(elements.citdOpenList, visibleOpenItems, 'Không có deadline cần làm phù hợp.');
   renderList(elements.citdCompletedList, completedItems, 'Chưa có bài nào hoàn thành phù hợp.');
 }
