@@ -66,11 +66,28 @@
           </div>
           <span id="citd-count" class="count-pill">0</span>
         </div>
-        <div id="citd-list" class="card-list"></div>
+        <section class="deadline-section" aria-labelledby="open-deadlines-heading">
+          <div class="list-section-heading">
+            <div>
+              <h3 id="open-deadlines-heading">Đang cần làm</h3>
+              <p>Việc được đánh dấu quan trọng sẽ lên đầu danh sách.</p>
+            </div>
+            <span id="open-items-count" class="count-pill">0</span>
+          </div>
+          <div id="citd-open-list" class="card-list"></div>
+        </section>
+
+        <details id="completed-section" class="completed-section">
+          <summary>
+            <span id="completed-heading">Đã hoàn thành</span>
+            <span id="completed-items-count" class="count-pill">0</span>
+          </summary>
+          <div id="citd-completed-list" class="card-list"></div>
+        </details>
       </section>
 
     </main>
-    <footer>Dashboard chỉ lắng nghe trên máy này. Không đưa token vào trình duyệt hoặc chia sẻ file <code>.env</code>.</footer>
+    <footer>Dashboard không yêu cầu đăng nhập; ai có URL đều có thể xem deadline. Không chia sẻ file <code>.env</code>.</footer>
   </div>
 </body>
 </html>

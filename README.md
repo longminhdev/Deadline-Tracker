@@ -17,7 +17,7 @@ Yêu cầu Node.js 26 trở lên.
 2. File dữ liệu đã có sẵn tại `data/deadlines.json`; không cần tạo Gist.
 3. Tạo fine-grained personal access token chỉ cấp cho repository này, với quyền **Contents: Read and write**. Không cần quyền Actions.
 4. Sao chép `.env.example` thành `.env` tại gốc repository, điền các giá trị GitHub, CITD và Jira. Không điền token trong giao diện web.
-5. Chạy `npm start` trong thư mục repository, rồi mở `http://127.0.0.1:4173`.
+5. Chạy `npm start` trong thư mục repository, rồi mở URL máy chủ in ra trong terminal (thường là `http://127.0.0.1:4173`). Nếu cổng mặc định đang được sử dụng, máy chủ tự chọn cổng khả dụng khác.
 
 Máy chủ chỉ bind vào loopback `127.0.0.1`. Token cục bộ chỉ được gửi từ máy chủ tới GitHub API, không được gửi xuống trình duyệt.
 
@@ -37,6 +37,8 @@ Nút **Quét dữ liệu ngay** chạy cùng worker cục bộ. Sau khi worker c
 Không cần cấu hình GitHub Actions Secrets hoặc workflow để đồng bộ. Có thể xóa các Actions secrets cũ sau khi đã chuyển các giá trị đã tạo mới vào `.env`.
 
 Jira trả trạng thái hoàn thành qua `resolutiondate`. Hạn Jira kiểu ngày được hiểu là 23:59:59 theo `Asia/Ho_Chi_Minh`. Moodle iCalendar không cho biết trạng thái nộp bài, nên dashboard cho phép đánh dấu thủ công và đồng bộ sẽ giữ trạng thái này qua các lần quét.
+
+Tên môn và giảng viên CITD được ánh xạ theo mã lớp trong `src/core.js`. Mã chưa có trong danh sách vẫn hiển thị như dữ liệu iCalendar.
 
 ## Kiểm tra
 

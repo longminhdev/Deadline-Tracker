@@ -57,12 +57,29 @@ h2 { margin: 0; font-size: 24px; letter-spacing: -.025em; }
 .column-heading .eyebrow { margin-bottom: 6px; color: #1672d4; }
 .count-pill { min-width: 38px; padding: 5px 11px; border: 1px solid #c9def5; border-radius: 999px; color: #1769c7; background: #edf6ff; text-align: center; font-size: 17px; font-weight: 750; }
 .card-list { display: grid; gap: 12px; }
+.deadline-section { margin-top: 4px; }
+.list-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 12px; }
+.list-section-heading h3 { margin: 0; color: #1b3452; font-size: 20px; }
+.list-section-heading p { margin: 4px 0 0; color: var(--muted); font-size: 17px; }
+.completed-section { margin-top: 22px; border-top: 1px solid #e7edf5; padding-top: 15px; }
+.completed-section summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; color: #197b5e; font-size: 20px; font-weight: 750; cursor: pointer; list-style: none; }
+.completed-section summary::-webkit-details-marker { display: none; }
+.completed-section summary::before { content: "＋"; color: #14805f; font-size: 20px; }
+.completed-section[open] summary::before { content: "−"; }
+.completed-section:not([open]) summary { margin-bottom: 0; }
 .deadline-card { min-width: 0; padding: 16px 17px; border: 1px solid #e0e9f3; border-radius: 14px; background: #fff; box-shadow: 0 3px 12px #264c7310; transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease; }
 .deadline-card:hover { transform: translateY(-1px); border-color: #bed6ef; box-shadow: 0 8px 20px #264c7316; }
 .deadline-card.is-overdue { border-color: #f0c38e; background: linear-gradient(110deg, #fff5e9, #fff 70%); }
 .deadline-card.is-urgent { border-color: #f0b8bd; background: linear-gradient(110deg, #fff0f1, #fff 70%); }
 .deadline-card.is-done { border-color: #b9e4d1; background: linear-gradient(110deg, #effaf4, #fff 70%); }
 .card-top { align-items: flex-start; font-size: 17px; }
+.importance-toggle { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 7px; min-height: 38px; padding: 5px 9px; border: 1px solid #e8d9ad; border-radius: 10px; color: #775912; background: #fff9e9; font-size: 17px; font-weight: 700; }
+.importance-toggle:hover, .importance-toggle.is-active { border-color: #e4bd57; color: #815c08; background: #fff2c9; }
+.importance-icon { display: inline-block; color: #d39408; font-size: 19px; line-height: 1; }
+.importance-toggle.is-active .importance-icon { animation: priority-blink .85s steps(2, jump-none) infinite; }
+.deadline-card.is-important { border-left: 4px solid #e2ae2f; }
+@keyframes priority-blink { 0%, 49% { opacity: 1; transform: scale(1); text-shadow: 0 0 0 #f3b51c; } 50%, 100% { opacity: .25; transform: scale(1.28); text-shadow: 0 0 9px #f3b51c; } }
+@media (prefers-reduced-motion: reduce) { .importance-toggle.is-active .importance-icon { animation-duration: 1.25s; } }
 .card-group-details { display: grid; flex: 1 1 auto; gap: 5px; min-width: 0; }
 .card-group { overflow: hidden; color: #536b87; text-overflow: ellipsis; white-space: nowrap; font-weight: 650; }
 .card-course-name { color: #2c405a; font-size: 17px; line-height: 1.4; overflow-wrap: anywhere; }

@@ -2,13 +2,29 @@ const state = {
   data: { updated_at: null, items: [] },
   filter: 'ALL',
   query: '',
+  importantIds: loadImportantIds(),
 };
+
+const IMPORTANT_STORAGE_KEY = 'deadline-tracker:important-items';
+
+function loadImportantIds() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('deadline-tracker:important-items') || '[]');
+    return new Set(Array.isArray(saved) ? saved.map(String) : []);
+  } catch {
+    return new Set();
+  }
+}
 
 const elements = {
   lastUpdated: document.querySelector('#last-updated'),
   notice: document.querySelector('#notice'),
-  citdList: document.querySelector('#citd-list'),
+  citdOpenList: document.querySelector('#citd-open-list'),
+  citdCompletedList: document.querySelector('#citd-completed-list'),
   citdCount: document.querySelector('#citd-count'),
+  openItemsCount: document.querySelector('#open-items-count'),
+  completedItemsCount: document.querySelector('#completed-items-count'),
+  completedSection: document.querySelector('#completed-section'),
   overdueCount: document.querySelector('#overdue-count'),
   urgentCount: document.querySelector('#urgent-count'),
   openCount: document.querySelector('#open-count'),
@@ -104,16 +120,34 @@ function getStatusLabel(item, status, remaining) {
 
 function makeCard(item) {
   const status = classify(item);
+  const important = state.importantIds.has(String(item.id));
   const due = new Date(item.due_at).getTime();
   const remaining = due - Date.now();
   const statusInfo = getStatusLabel(item, status, remaining);
   const card = makeElement('article', 'deadline-card');
+  card.dataset.itemId = String(item.id);
+  if (important && status === 'UNSUBMITTED') card.classList.add('is-important');
   if (status !== 'UNSUBMITTED') card.classList.add('is-done');
   else if (remaining < 0) card.classList.add('is-overdue');
   else if (remaining < 86_400_000) card.classList.add('is-urgent');
 
   const top = makeElement('div', 'card-top');
-  top.append(makeElement('span', 'card-group', item.group || ''));
+  const groupDetails = makeElement('div', 'card-group-details');
+  groupDetails.append(makeElement('span', 'card-group', item.group || ''));
+  if (item.course_name) groupDetails.append(makeElement('span', 'card-course-name', item.course_name));
+  if (item.instructor) groupDetails.append(makeElement('span', 'card-instructor', `Giảng viên: ${item.instructor}`));
+  top.append(groupDetails);
+  if (status === 'UNSUBMITTED') {
+    const importanceButton = makeElement('button', `importance-toggle${important ? ' is-active' : ''}`);
+    importanceButton.type = 'button';
+    importanceButton.setAttribute('aria-pressed', String(important));
+    importanceButton.setAttribute('aria-label', important ? 'Bỏ đánh dấu quan trọng' : 'Đánh dấu quan trọng');
+    importanceButton.title = important ? 'Bỏ đánh dấu quan trọng' : 'Đánh dấu quan trọng';
+    importanceButton.append(makeElement('span', 'importance-icon', important ? '★' : '☆'));
+    importanceButton.append(makeElement('span', 'importance-label', important ? 'Ưu tiên' : 'Quan trọng'));
+    importanceButton.addEventListener('click', () => toggleImportant(item.id));
+    top.append(importanceButton);
+  }
   top.append(makeElement('span', `card-status ${statusInfo.className}`, statusInfo.label));
 
   const title = makeElement('a', 'card-title', item.title || '(Không có tiêu đề)');
@@ -143,10 +177,10 @@ function makeCard(item) {
   return card;
 }
 
-function renderList(container, items) {
+function renderList(container, items, emptyMessage) {
   container.replaceChildren();
   if (!items.length) {
-    container.append(makeElement('p', 'empty-state', 'Không có deadline phù hợp.'));
+    container.append(makeElement('p', 'empty-state', emptyMessage));
     return;
   }
   for (const item of items) container.append(makeCard(item));
@@ -169,9 +203,31 @@ function render() {
     if (state.filter !== 'ALL' && classify(item) !== state.filter) return false;
     return !normalizedQuery || `${item.title} ${item.group} ${item.course_name || ''}`.toLocaleLowerCase('vi').includes(normalizedQuery);
   });
-  const citd = visible.filter((item) => item.source === 'CITD').sort((a, b) => new Date(a.due_at) - new Date(b.due_at));
-  elements.citdCount.textContent = citd.length;
-  renderList(elements.citdList, citd);
+  const visibleOpenItems = visible.filter((item) => classify(item) === 'UNSUBMITTED');
+  const completedItems = visible.filter((item) => classify(item) !== 'UNSUBMITTED');
+  visibleOpenItems.sort((a, b) => {
+    const priorityDifference = Number(state.importantIds.has(String(b.id))) - Number(state.importantIds.has(String(a.id)));
+    return priorityDifference || new Date(a.due_at) - new Date(b.due_at);
+  });
+  completedItems.sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at));
+  elements.citdCount.textContent = visible.length;
+  elements.openItemsCount.textContent = visibleOpenItems.length;
+  elements.completedItemsCount.textContent = completedItems.length;
+  if (state.filter !== 'ALL') elements.completedSection.open = completedItems.length > 0;
+  renderList(elements.citdOpenList, visibleOpenItems, 'Không có deadline cần làm phù hợp.');
+  renderList(elements.citdCompletedList, completedItems, 'Chưa có bài nào hoàn thành phù hợp.');
+}
+
+function toggleImportant(itemId) {
+  const id = String(itemId);
+  if (state.importantIds.has(id)) state.importantIds.delete(id);
+  else state.importantIds.add(id);
+  try {
+    localStorage.setItem(IMPORTANT_STORAGE_KEY, JSON.stringify([...state.importantIds]));
+  } catch {
+    setNotice('Không lưu được mức ưu tiên trên thiết bị này.', true);
+  }
+  render();
 }
 
 async function toggleSubmitted(item, button) {
@@ -202,6 +258,11 @@ async function triggerSync() {
     const response = await fetch('/api/sync', { method: 'POST' });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || `Không thể kích hoạt đồng bộ (${response.status}).`);
+    if (result.completed) {
+      await loadData({ quiet: true });
+      setNotice('Đồng bộ hoàn tất.');
+      return;
+    }
     setNotice('Đang quét dữ liệu học tập từ máy này...');
 
     for (let attempt = 0; attempt < 60; attempt += 1) {

@@ -1,4 +1,22 @@
 const DEFAULT_TIME_ZONE = 'Asia/Ho_Chi_Minh';
+const COURSE_DETAILS = {
+  'MA005.G12.LT.CNTT': {
+    name: 'Xác suất thống kê',
+    instructor: 'Lê Huỳnh Mỹ Vân',
+  },
+  'MA004.G12.LT.CNTT': {
+    name: 'Cấu trúc rời rạc',
+    instructor: 'Nguyễn Văn Hợi',
+  },
+  'IT003.G12.LT.CNTT': {
+    name: 'Cấu trúc dữ liệu và giải thuật',
+    instructor: 'Phạm Thế Sơn',
+  },
+  'IE105.G12.LT.CNTT': {
+    name: 'Nhập môn bảo đảm và an ninh thông tin',
+    instructor: 'Tô Nguyễn Nhật Quang',
+  },
+};
 
 function unescapeIcsText(value) {
   return value
@@ -125,7 +143,8 @@ export function parseICS(text) {
     const due = end ? parseIcsDate(end, true) : start ? parseIcsDate(start, false) : null;
     if (!uid || !title || !due || Number.isNaN(due.getTime())) continue;
 
-    const category = first('CATEGORIES')?.value || '';
+    const category = unescapeIcsText(first('CATEGORIES')?.value || '');
+    const courseDetails = COURSE_DETAILS[category];
     const eventUrl = first('URL')?.value.trim();
     let url = 'https://elearning.citd.edu.vn/my/';
     if (eventUrl) {
@@ -140,7 +159,11 @@ export function parseICS(text) {
     events.push({
       id: `citd_${uid}`,
       source: 'CITD',
-      group: unescapeIcsText(category) || 'Môn học CITD',
+      group: category || 'Môn học CITD',
+      ...(courseDetails ? {
+        course_name: courseDetails.name,
+        instructor: courseDetails.instructor,
+      } : {}),
       title: unescapeIcsText(title),
       due_at: due.toISOString(),
       submitted_at: null,

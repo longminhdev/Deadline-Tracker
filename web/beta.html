@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Theo dõi deadline học tập của riêng bạn.">
+  <title>Deadline Tracker — Beta</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/beta.css">
+  <script src="/beta-app.js" type="module" defer></script>
+</head>
+<body>
+  <div class="page-shell beta-shell">
+    <header class="topbar beta-topbar">
+      <div>
+        <p class="eyebrow"><span class="signal-dot"></span> BETA RIÊNG TƯ</p>
+        <h1>Deadline <span>Tracker</span></h1>
+        <p id="last-updated" class="muted">Đăng nhập để xem deadline của bạn</p>
+      </div>
+      <div id="account-bar" class="account-bar" hidden>
+        <span id="account-email" class="account-email"></span>
+        <button id="sign-out-button" class="button button-muted" type="button">Đăng xuất</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="sign-in-panel" class="beta-panel sign-in-panel" aria-labelledby="sign-in-heading">
+        <div class="panel-icon" aria-hidden="true">✦</div>
+        <p class="eyebrow">KHÔNG CẦN MẬT KHẨU TRƯỜNG</p>
+        <h2 id="sign-in-heading">Vào tài khoản của bạn</h2>
+        <p class="panel-copy">Nhập email đã được mời tham gia beta. Mình sẽ gửi liên kết đăng nhập một lần.</p>
+        <form id="sign-in-form" class="beta-form">
+          <label for="email-input">Email</label>
+          <input id="email-input" type="email" autocomplete="email" required placeholder="ten@vi-du.com">
+          <button id="sign-in-button" class="button button-primary" type="submit">Gửi liên kết đăng nhập</button>
+        </form>
+        <p id="sign-in-message" class="form-message" role="status" aria-live="polite"></p>
+      </section>
+
+      <section id="app-panel" hidden>
+        <section class="beta-panel integration-panel" aria-labelledby="integration-heading">
+          <div class="integration-copy">
+            <p class="eyebrow">KẾT NỐI CÁ NHÂN</p>
+            <h2 id="integration-heading">Lịch eLearning của bạn</h2>
+            <p class="panel-copy">Dán URL lịch ICS do trường cấp. Không nhập mật khẩu eLearning. URL được mã hóa trước khi lưu.</p>
+          </div>
+          <form id="integration-form" class="beta-form integration-form">
+            <label for="ics-url-input">URL lịch ICS</label>
+            <input id="ics-url-input" type="url" inputmode="url" autocomplete="off" required placeholder="https://.../calendar/export.php?...">
+            <div class="integration-actions">
+              <button id="save-integration-button" class="button button-muted" type="submit">Lưu lịch</button>
+              <button id="sync-button" class="button button-primary" type="button">Đồng bộ ngay</button>
+            </div>
+          </form>
+          <p id="integration-status" class="integration-status" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="summary" aria-label="Tổng quan deadline">
+          <article class="summary-card summary-danger"><span class="summary-label">Quá hạn</span><strong id="overdue-count">0</strong></article>
+          <article class="summary-card summary-warning"><span class="summary-label">Trong 24 giờ</span><strong id="urgent-count">0</strong></article>
+          <article class="summary-card summary-neutral"><span class="summary-label">Chưa hoàn thành</span><strong id="open-count">0</strong></article>
+          <article class="summary-card summary-success"><span class="summary-label">Đã xong</span><strong id="done-count">0</strong></article>
+        </section>
+
+        <section class="controls" aria-label="Lọc deadline">
+          <div class="filter-group" role="group" aria-label="Lọc trạng thái">
+            <button class="filter-button is-active" data-filter="ALL" type="button">Tất cả</button>
+            <button class="filter-button" data-filter="UNSUBMITTED" type="button">Chưa xong</button>
+            <button class="filter-button" data-filter="SUBMITTED_ON_TIME" type="button">Đúng hạn</button>
+            <button class="filter-button" data-filter="SUBMITTED_LATE" type="button">Trễ hạn</button>
+          </div>
+          <label class="search-wrap">
+            <span class="visually-hidden">Tìm theo tên deadline hoặc môn học</span>
+            <input id="search-input" type="search" placeholder="Tìm deadline..." autocomplete="off">
+          </label>
+        </section>
+
+        <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+        <section class="source-column beta-deadline-column" aria-labelledby="citd-heading">
+          <div class="column-heading">
+            <div><p class="eyebrow">HỌC TẬP</p><h2 id="citd-heading">CITD-Elearning</h2></div>
+            <span id="citd-count" class="count-pill">0</span>
+          </div>
+          <div id="citd-list" class="card-list"></div>
+        </section>
+      </section>
+    </main>
+    <footer>Beta riêng tư · Mỗi tài khoản chỉ truy cập deadline và lịch ICS của chính mình.</footer>
+  </div>
+</body>
+</html>

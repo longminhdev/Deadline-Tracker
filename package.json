@@ -6,8 +6,15 @@
     "node": ">=26"
   },
   "scripts": {
-    "start": "node server.js",
+    "build": "esbuild web/beta-app.js --bundle --format=esm --outfile=web/beta-app.bundle.js",
+    "start": "npm run build && node server.js",
     "sync": "node src/sync.js",
     "test": "node --test"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.119.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
   }
 }

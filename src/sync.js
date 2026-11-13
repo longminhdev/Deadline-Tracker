@@ -1,4 +1,5 @@
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { resolve } from 'node:path';
 import { loadEnvFile } from './env.js';
 import { classifyItem, dueDateToIso, parseICS } from './core.js';
 import { readDeadlines, writeDeadlines } from './github-repo.js';
@@ -57,7 +58,7 @@ async function fetchJiraItems(domain, email, apiToken) {
   return items;
 }
 
-async function main() {
+export async function syncNow() {
   const icsUrl = requiredEnv('CITD_ICS_URL');
   const jiraDomain = requiredEnv('JIRA_DOMAIN');
   const jiraEmail = requiredEnv('JIRA_EMAIL');
@@ -80,8 +81,14 @@ async function main() {
     fetchJiraItems(jiraDomain, jiraEmail, jiraToken),
     readDeadlines(githubToken, repository),
   ]);
+  // if (!icsResponse.ok) {
+  //   throw new Error(`Không tải được lịch CITD (HTTP ${icsResponse.status}). Kiểm tra secret CITD_ICS_URL.`);
+  // }
+
   if (!icsResponse.ok) {
-    throw new Error(`Không tải được lịch CITD (HTTP ${icsResponse.status}). Kiểm tra secret CITD_ICS_URL.`);
+    const body = (await icsResponse.text()).slice(0, 300);
+    console.error('Server:', icsResponse.headers.get('server'), '| Body:', body);
+    throw new Error(`Không tải được lịch CITD (HTTP ${icsResponse.status}).`);
   }
 
   const icsText = await icsResponse.text();
@@ -125,7 +132,12 @@ async function main() {
   console.log(`Trạng thái: ${JSON.stringify(statusCounts)}`);
 }
 
-main().catch((error) => {
-  console.error(error.message || error);
-  process.exitCode = 1;
-});
+const isDirectExecution = process.argv[1]
+  && pathToFileURL(resolve(process.argv[1])).href === import.meta.url;
+
+if (isDirectExecution) {
+  syncNow().catch((error) => {
+    console.error(error.message || error);
+    process.exitCode = 1;
+  });
+}

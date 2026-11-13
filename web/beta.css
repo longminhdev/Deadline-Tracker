@@ -1,0 +1,33 @@
+.beta-shell { padding-top: 36px; }
+.beta-topbar { align-items: center; }
+.account-bar { display: flex; align-items: center; gap: 15px; }
+.account-email { color: #536983; font-size: 17px; font-weight: 650; }
+.beta-panel { padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: rgb(255 255 255 / 94%); box-shadow: 0 12px 34px #274b7210; }
+.sign-in-panel { width: min(100%, 560px); margin: 48px auto; padding: 34px; }
+.panel-icon { display: grid; width: 52px; height: 52px; margin-bottom: 20px; place-items: center; border-radius: 15px; color: #1769d2; background: #eaf4ff; font-size: 26px; }
+.beta-panel h2 { margin-bottom: 9px; }
+.panel-copy { margin-bottom: 18px; color: #60738d; font-size: 17px; line-height: 1.55; }
+.beta-form { display: grid; gap: 10px; }
+.beta-form label { color: #314962; font-size: 17px; font-weight: 700; }
+.beta-form input { width: 100%; min-height: 48px; padding: 11px 14px; border: 1px solid #d6e2f0; border-radius: 11px; outline: 0; color: #14243b; background: #fff; font: inherit; font-size: 17px; }
+.beta-form input:focus { border-color: #5b9ceb; box-shadow: 0 0 0 4px #1769d21a; }
+.beta-form .button { margin-top: 4px; }
+.form-message { min-height: 26px; margin: 13px 0 0; color: #1769a4; font-size: 17px; line-height: 1.5; }
+.integration-panel { display: grid; grid-template-columns: minmax(250px, .8fr) minmax(320px, 1.2fr); align-items: center; column-gap: 30px; row-gap: 4px; margin: 24px 0; }
+.integration-copy .panel-copy { max-width: 520px; margin-bottom: 0; }
+.integration-form { min-width: 0; }
+.integration-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.integration-status { grid-column: 1 / -1; min-height: 26px; margin: 6px 0 0; color: #60738d; font-size: 17px; }
+.integration-status.is-error { color: #b65a12; }
+.beta-deadline-column { max-width: 1120px; margin: 0 auto; }
+#app-panel .summary { margin-top: 22px; }
+footer { margin-top: 24px; }
+[hidden] { display: none !important; }
+@media (max-width: 760px) {
+  .beta-shell { padding-top: 24px; }
+  .beta-topbar { align-items: flex-start; }
+  .account-bar { width: 100%; justify-content: space-between; }
+  .sign-in-panel { margin: 28px auto; padding: 24px; }
+  .integration-panel { grid-template-columns: 1fr; gap: 17px; padding: 19px; }
+  .integration-status { grid-column: auto; }
+}
