@@ -8,9 +8,7 @@ const elements = {
   lastUpdated: document.querySelector('#last-updated'),
   notice: document.querySelector('#notice'),
   citdList: document.querySelector('#citd-list'),
-  jiraList: document.querySelector('#jira-list'),
   citdCount: document.querySelector('#citd-count'),
-  jiraCount: document.querySelector('#jira-count'),
   overdueCount: document.querySelector('#overdue-count'),
   urgentCount: document.querySelector('#urgent-count'),
   openCount: document.querySelector('#open-count'),
@@ -156,7 +154,7 @@ function renderList(container, items) {
 
 function render() {
   const now = Date.now();
-  const allItems = state.data.items;
+  const allItems = state.data.items.filter((item) => item.source === 'CITD');
   const openItems = allItems.filter((item) => classify(item) === 'UNSUBMITTED');
   elements.overdueCount.textContent = openItems.filter((item) => new Date(item.due_at).getTime() < now).length;
   elements.urgentCount.textContent = openItems.filter((item) => {
@@ -169,14 +167,11 @@ function render() {
   const normalizedQuery = state.query.trim().toLocaleLowerCase('vi');
   const visible = allItems.filter((item) => {
     if (state.filter !== 'ALL' && classify(item) !== state.filter) return false;
-    return !normalizedQuery || `${item.title} ${item.group} ${item.source}`.toLocaleLowerCase('vi').includes(normalizedQuery);
+    return !normalizedQuery || `${item.title} ${item.group} ${item.course_name || ''}`.toLocaleLowerCase('vi').includes(normalizedQuery);
   });
   const citd = visible.filter((item) => item.source === 'CITD').sort((a, b) => new Date(a.due_at) - new Date(b.due_at));
-  const jira = visible.filter((item) => item.source === 'JIRA').sort((a, b) => new Date(a.due_at) - new Date(b.due_at));
   elements.citdCount.textContent = citd.length;
-  elements.jiraCount.textContent = jira.length;
   renderList(elements.citdList, citd);
-  renderList(elements.jiraList, jira);
 }
 
 async function toggleSubmitted(item, button) {
@@ -207,7 +202,7 @@ async function triggerSync() {
     const response = await fetch('/api/sync', { method: 'POST' });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || `Không thể kích hoạt đồng bộ (${response.status}).`);
-    setNotice('Đang quét CITD và Jira từ máy này...');
+    setNotice('Đang quét dữ liệu học tập từ máy này...');
 
     for (let attempt = 0; attempt < 60; attempt += 1) {
       await new Promise((resolve) => setTimeout(resolve, 1000));

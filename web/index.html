@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark">
-  <meta name="description" content="Bảng theo dõi deadline học tập CITD và công việc Jira.">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Bảng theo dõi deadline học tập CITD-Elearning.">
   <title>Deadline Tracker</title>
   <link rel="stylesheet" href="/styles.css">
   <script src="/app.js" defer></script>
@@ -13,9 +13,9 @@
   <div class="page-shell">
     <header class="topbar">
       <div>
-        <p class="eyebrow">PERSONAL COMMAND CENTER</p>
-        <h1>Deadline Tracker</h1>
-        <p id="last-updated" class="muted">Đang kết nối...</p>
+        <p class="eyebrow"><span class="signal-dot"></span> PERSONAL COMMAND CENTER</p>
+        <h1>Deadline <span>Tracker</span></h1>
+        <p class="muted" id="last-updated">Đang kết nối...</p>
       </div>
       <div class="toolbar">
         <button id="refresh-button" class="button button-muted" type="button">Làm mới</button>
@@ -69,16 +69,6 @@
         <div id="citd-list" class="card-list"></div>
       </section>
 
-      <section class="source-column" aria-labelledby="jira-heading">
-        <div class="column-heading">
-          <div>
-            <p class="eyebrow">CÔNG VIỆC</p>
-            <h2 id="jira-heading">Jira</h2>
-          </div>
-          <span id="jira-count" class="count-pill">0</span>
-        </div>
-        <div id="jira-list" class="card-list"></div>
-      </section>
     </main>
     <footer>Dashboard chỉ lắng nghe trên máy này. Không đưa token vào trình duyệt hoặc chia sẻ file <code>.env</code>.</footer>
   </div>
