@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Bảng theo dõi deadline học tập CITD và công việc Jira.">
+  <title>Deadline Tracker</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">PERSONAL COMMAND CENTER</p>
+        <h1>Deadline Tracker</h1>
+        <p id="last-updated" class="muted">Đang kết nối...</p>
+      </div>
+      <div class="toolbar">
+        <button id="refresh-button" class="button button-muted" type="button">Làm mới</button>
+        <button id="sync-button" class="button button-primary" type="button">Quét dữ liệu ngay</button>
+      </div>
+    </header>
+
+    <section class="summary" aria-label="Tổng quan deadline">
+      <article class="summary-card summary-danger">
+        <span class="summary-label">Quá hạn</span>
+        <strong id="overdue-count">0</strong>
+      </article>
+      <article class="summary-card summary-warning">
+        <span class="summary-label">Trong 24 giờ</span>
+        <strong id="urgent-count">0</strong>
+      </article>
+      <article class="summary-card summary-neutral">
+        <span class="summary-label">Chưa hoàn thành</span>
+        <strong id="open-count">0</strong>
+      </article>
+      <article class="summary-card summary-success">
+        <span class="summary-label">Đã xong</span>
+        <strong id="done-count">0</strong>
+      </article>
+    </section>
+
+    <section class="controls" aria-label="Lọc deadline">
+      <div class="filter-group" role="group" aria-label="Lọc trạng thái">
+        <button class="filter-button is-active" data-filter="ALL" type="button">Tất cả</button>
+        <button class="filter-button" data-filter="UNSUBMITTED" type="button">Chưa xong</button>
+        <button class="filter-button" data-filter="SUBMITTED_ON_TIME" type="button">Đúng hạn</button>
+        <button class="filter-button" data-filter="SUBMITTED_LATE" type="button">Trễ hạn</button>
+      </div>
+      <label class="search-wrap">
+        <span class="visually-hidden">Tìm theo tên deadline, môn học hoặc dự án</span>
+        <input id="search-input" type="search" placeholder="Tìm deadline..." autocomplete="off">
+      </label>
+    </section>
+
+    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+    <main class="columns">
+      <section class="source-column" aria-labelledby="citd-heading">
+        <div class="column-heading">
+          <div>
+            <p class="eyebrow">HỌC TẬP</p>
+            <h2 id="citd-heading">CITD-Elearning</h2>
+          </div>
+          <span id="citd-count" class="count-pill">0</span>
+        </div>
+        <div id="citd-list" class="card-list"></div>
+      </section>
+
+      <section class="source-column" aria-labelledby="jira-heading">
+        <div class="column-heading">
+          <div>
+            <p class="eyebrow">CÔNG VIỆC</p>
+            <h2 id="jira-heading">Jira</h2>
+          </div>
+          <span id="jira-count" class="count-pill">0</span>
+        </div>
+        <div id="jira-list" class="card-list"></div>
+      </section>
+    </main>
+    <footer>Dashboard chỉ lắng nghe trên máy này. Không đưa token vào trình duyệt hoặc chia sẻ file <code>.env</code>.</footer>
+  </div>
+</body>
+</html>
