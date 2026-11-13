@@ -59,20 +59,19 @@ h2 { margin: 0; font-size: 24px; letter-spacing: -.025em; }
 .card-list { display: grid; gap: 12px; }
 .deadline-card { min-width: 0; padding: 16px 17px; border: 1px solid #e0e9f3; border-radius: 14px; background: #fff; box-shadow: 0 3px 12px #264c7310; transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease; }
 .deadline-card:hover { transform: translateY(-1px); border-color: #bed6ef; box-shadow: 0 8px 20px #264c7316; }
-.deadline-card.is-overdue { border-color: #f0c6cc; background: linear-gradient(110deg, #fff5f5, #fff 70%); }
-.deadline-card.is-urgent { border-color: #f1d8a9; background: linear-gradient(110deg, #fffaf0, #fff 70%); }
-.deadline-card.is-done { background: #fbfdff; }
+.deadline-card.is-overdue { border-color: #f0c38e; background: linear-gradient(110deg, #fff5e9, #fff 70%); }
+.deadline-card.is-urgent { border-color: #f0b8bd; background: linear-gradient(110deg, #fff0f1, #fff 70%); }
+.deadline-card.is-done { border-color: #b9e4d1; background: linear-gradient(110deg, #effaf4, #fff 70%); }
 .card-top { align-items: flex-start; font-size: 17px; }
 .card-group-details { display: grid; flex: 1 1 auto; gap: 5px; min-width: 0; }
 .card-group { overflow: hidden; color: #536b87; text-overflow: ellipsis; white-space: nowrap; font-weight: 650; }
 .card-course-name { color: #2c405a; font-size: 17px; line-height: 1.4; overflow-wrap: anywhere; }
 .card-instructor { color: #60738d; font-size: 17px; }
 .card-status { flex: 0 0 auto; max-width: 48%; text-align: right; font-size: 17px; font-weight: 750; line-height: 1.4; }
-.status-overdue, .status-late { color: #c43d50; }
-.status-urgent { color: #a5630d; }
+.status-overdue, .status-late { color: #b65a12; }
+.status-urgent { color: #c93648; }
 .status-open { color: #1765bd; }
 .status-done { color: #12805f; }
-.status-completed-late { color: #bd5b25; }
 .card-title { display: inline-block; margin: 14px 0 15px; color: #142c49; font-size: 19px; font-weight: 750; line-height: 1.45; text-decoration: none; overflow-wrap: anywhere; }
 .card-title:hover { color: var(--blue); }
 .card-bottom { flex-wrap: wrap; padding-top: 12px; border-top: 1px solid #edf2f8; color: #60738d; font-size: 17px; }

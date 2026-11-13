@@ -94,10 +94,10 @@ function getStatusLabel(item, status, remaining) {
       label: item.source === 'CITD'
         ? `Đã nộp trễ ${formatDuration(new Date(item.submitted_at) - new Date(item.due_at))}`
         : `Hoàn thành trễ ${formatDuration(new Date(item.submitted_at) - new Date(item.due_at))}`,
-      className: 'status-completed-late',
+      className: 'status-done',
     };
   }
-  if (remaining < 0) return { label: `Quá hạn ${formatDuration(remaining)}`, className: 'status-overdue' };
+  if (remaining < 0) return { label: `⚠ Quá hạn ${formatDuration(remaining)}`, className: 'status-overdue' };
   if (remaining < 86_400_000) return { label: `Còn ${formatDuration(remaining)}`, className: 'status-urgent' };
   return { label: `Còn ${formatDuration(remaining)}`, className: 'status-open' };
 }
