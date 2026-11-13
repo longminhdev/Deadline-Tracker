@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-13T08:25:16.155Z",
+  "updated_at": "2026-11-13T13:17:26.139Z",
   "items": [
     {
       "id": "citd_28595@elearning.citd.edu.vn",
@@ -21,6 +21,17 @@
       "title": "Bài thực hành 2A (deadline: 18g30p, 13.11.2026) tới hạn",
       "due_at": "2026-11-13T11:30:00.000Z",
       "submitted_at": "2026-11-13T13:02:57.012Z",
+      "url": "https://elearning.citd.edu.vn/my/"
+    },
+    {
+      "id": "citd_29006@elearning.citd.edu.vn",
+      "source": "CITD",
+      "group": "IE105.G12.LT.CNTT",
+      "course_name": "Nhập môn bảo đảm và an ninh thông tin",
+      "instructor": "Tô Nguyễn Nhật Quang",
+      "title": "Bài tập buổi học 13.11.2026 tới hạn",
+      "due_at": "2026-11-13T15:00:00.000Z",
+      "submitted_at": null,
       "url": "https://elearning.citd.edu.vn/my/"
     },
     {
