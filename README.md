@@ -2,6 +2,8 @@
 
 Dashboard cục bộ theo dõi hạn CITD-Elearning và Jira. GitHub Actions lấy dữ liệu mỗi ngày lúc 22:30 giờ Việt Nam, giữ trạng thái đã nộp trong file thuộc Private GitHub repository và có thể chạy thủ công từ dashboard.
 
+Yêu cầu Node.js 26 trở lên.
+
 ## Bảo mật
 
 - Không đặt GitHub PAT, Jira token hoặc URL lịch có authtoken trong mã nguồn hay frontend.
