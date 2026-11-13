@@ -1,4 +1,41 @@
 {
-  "updated_at": null,
-  "items": []
+  "updated_at": "2026-11-13T06:48:23.861Z",
+  "items": [
+    {
+      "id": "citd_28595@elearning.citd.edu.vn",
+      "source": "CITD",
+      "group": "MA005.G12.LT.CNTT",
+      "title": "Bài tập chương 2 tới hạn",
+      "due_at": "2026-11-11T16:59:00.000Z",
+      "submitted_at": null,
+      "url": "https://elearning.citd.edu.vn/my/"
+    },
+    {
+      "id": "citd_28778@elearning.citd.edu.vn",
+      "source": "CITD",
+      "group": "IE105.G12.LT.CNTT",
+      "title": "Bài thực hành 2A (deadline: 18g30p, 13.11.2026) tới hạn",
+      "due_at": "2026-11-13T11:30:00.000Z",
+      "submitted_at": null,
+      "url": "https://elearning.citd.edu.vn/my/"
+    },
+    {
+      "id": "citd_28931@elearning.citd.edu.vn",
+      "source": "CITD",
+      "group": "IT003.G12.LT.CNTT",
+      "title": "Buổi 3 - Bài tập tuần - Học tối Thứ 3 ngày 10/11/2026 (Liên kết đơn cho số thực) tới hạn",
+      "due_at": "2026-11-16T13:00:00.000Z",
+      "submitted_at": null,
+      "url": "https://elearning.citd.edu.vn/my/"
+    },
+    {
+      "id": "citd_28928@elearning.citd.edu.vn",
+      "source": "CITD",
+      "group": "IT003.G12.LT.CNTT",
+      "title": "Buổi 3 - Code - Học tối Thứ 3 ngày 10/11/2026 tới hạn",
+      "due_at": "2026-11-16T14:00:00.000Z",
+      "submitted_at": null,
+      "url": "https://elearning.citd.edu.vn/my/"
+    }
+  ]
 }
