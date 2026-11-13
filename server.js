@@ -1,35 +1,32 @@
 import { createServer } from 'node:http';
+import { spawn } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
-import { existsSync, readFileSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadEnvFile } from './src/env.js';
 import { readDeadlines, writeDeadlines } from './src/github-repo.js';
 
 const ROOT = fileURLToPath(new URL('.', import.meta.url));
 const WEB_ROOT = join(ROOT, 'web');
-const API_HEADERS = {
-  Accept: 'application/vnd.github+json',
-  'X-GitHub-Api-Version': '2022-11-28',
-};
-
-function loadEnvFile() {
-  const envPath = join(ROOT, '.env');
-  if (!existsSync(envPath)) return;
-  for (const line of readFileSync(envPath, 'utf8').split(/\r?\n/)) {
-    const match = line.match(/^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*?)\s*$/);
-    if (!match || match[1].startsWith('#') || process.env[match[1]] !== undefined) continue;
-    let value = match[2];
-    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
-      value = value.slice(1, -1);
-    }
-    process.env[match[1]] = value;
-  }
-}
-
-loadEnvFile();
+loadEnvFile(join(ROOT, '.env'));
 
 const port = Number(process.env.PORT || 4173);
 const origin = `http://127.0.0.1:${port}`;
+const syncEnvNames = [
+  'CITD_ICS_URL',
+  'JIRA_DOMAIN',
+  'JIRA_EMAIL',
+  'JIRA_API_TOKEN',
+  'GH_PAT',
+  'GITHUB_REPOSITORY',
+];
+let syncState = {
+  running: false,
+  startedAt: null,
+  completedAt: null,
+  success: null,
+  error: null,
+};
 
 function jsonResponse(response, status, value) {
   response.writeHead(status, {
@@ -44,9 +41,43 @@ function credentials() {
   const token = process.env.GH_PAT?.trim();
   const repository = process.env.GITHUB_REPOSITORY?.trim();
   if (!token || !repository) {
-    throw new Error('Cấu hình GH_PAT và GITHUB_REPOSITORY trong deadline-tracker/.env trước khi sử dụng.');
+    throw new Error('Cấu hình GH_PAT và GITHUB_REPOSITORY trong file .env trước khi sử dụng.');
   }
   return { token, repository };
+}
+
+function startLocalSync() {
+  const missing = syncEnvNames.filter((name) => !process.env[name]?.trim());
+  if (missing.length) {
+    throw new Error(`Thiếu cấu hình trong .env: ${missing.join(', ')}`);
+  }
+
+  const startedAt = new Date().toISOString();
+  syncState = { running: true, startedAt, completedAt: null, success: null, error: null };
+  const child = spawn(process.execPath, ['src/sync.js'], {
+    cwd: ROOT,
+    env: process.env,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    windowsHide: true,
+  });
+  let output = '';
+  let launchError = null;
+  const capture = (chunk) => {
+    output = `${output}${chunk.toString()}`.slice(-4000);
+  };
+  child.stdout.on('data', capture);
+  child.stderr.on('data', capture);
+  child.on('error', (error) => { launchError = error; });
+  child.on('close', (code) => {
+    const success = code === 0;
+    syncState = {
+      running: false,
+      startedAt,
+      completedAt: new Date().toISOString(),
+      success,
+      error: success ? null : launchError?.message || output.trim() || `Đồng bộ thoát với mã ${code}.`,
+    };
+  });
 }
 
 async function readJsonBody(request) {
@@ -106,25 +137,19 @@ const server = createServer(async (request, response) => {
       return jsonResponse(response, 200, data);
     }
 
+    if (request.method === 'GET' && url.pathname === '/api/sync/status') {
+      return jsonResponse(response, 200, syncState);
+    }
+
     if (request.method === 'POST' && url.pathname === '/api/sync') {
       if (requestOrigin !== origin) {
         return jsonResponse(response, 403, { error: 'Origin không được phép.' });
       }
-      const { token, repository } = credentials();
-      const result = await fetch(
-        `https://api.github.com/repos/${repository}/actions/workflows/deadline-sync.yml/dispatches`,
-        {
-          method: 'POST',
-          headers: {
-            ...API_HEADERS,
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ ref: 'main' }),
-        },
-      );
-      if (!result.ok) throw new Error(`Không kích hoạt được GitHub Actions (HTTP ${result.status}).`);
-      return jsonResponse(response, 202, { queued: true });
+      if (syncState.running) {
+        return jsonResponse(response, 409, { error: 'Một lần đồng bộ khác đang chạy.' });
+      }
+      startLocalSync();
+      return jsonResponse(response, 202, { started: true });
     }
 
     const submissionMatch = url.pathname.match(/^\/api\/items\/([^/]+)\/submission$/);

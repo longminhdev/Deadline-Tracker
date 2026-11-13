@@ -201,19 +201,26 @@ async function toggleSubmitted(item, button) {
 
 async function triggerSync() {
   elements.syncButton.disabled = true;
-  elements.syncButton.textContent = 'Đang kích hoạt...';
+  elements.syncButton.textContent = 'Đang quét...';
   setNotice('');
   try {
     const response = await fetch('/api/sync', { method: 'POST' });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || `Không thể kích hoạt đồng bộ (${response.status}).`);
-    setNotice('Đã xếp hàng đồng bộ. Đang chờ GitHub Actions cập nhật dữ liệu...');
+    setNotice('Đang quét CITD và Jira từ máy này...');
 
-    for (let attempt = 0; attempt < 12; attempt += 1) {
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+    for (let attempt = 0; attempt < 60; attempt += 1) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const statusResponse = await fetch('/api/sync/status', { cache: 'no-store' });
+      const status = await statusResponse.json();
+      if (!statusResponse.ok) throw new Error(status.error || 'Không đọc được trạng thái đồng bộ.');
+      if (status.running) continue;
+      if (!status.success) throw new Error(status.error || 'Đồng bộ thất bại.');
       await loadData({ quiet: true });
+      setNotice('Đồng bộ hoàn tất.');
+      return;
     }
-    setNotice('Đã chờ đồng bộ tối đa 60 giây. Bấm “Làm mới” để kiểm tra dữ liệu mới nhất.');
+    setNotice('Đồng bộ vẫn đang chạy. Bấm “Làm mới” sau ít phút để xem dữ liệu.');
   } catch (error) {
     setNotice(error.message, true);
   } finally {

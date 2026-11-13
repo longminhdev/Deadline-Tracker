@@ -1,9 +1,13 @@
+import { fileURLToPath } from 'node:url';
+import { loadEnvFile } from './env.js';
 import { classifyItem, dueDateToIso, parseICS } from './core.js';
 import { readDeadlines, writeDeadlines } from './github-repo.js';
 
+loadEnvFile(fileURLToPath(new URL('../.env', import.meta.url)));
+
 function requiredEnv(name) {
   const value = process.env[name]?.trim();
-  if (!value) throw new Error(`Thiếu GitHub Actions secret: ${name}`);
+  if (!value) throw new Error(`Thiếu cấu hình môi trường: ${name}`);
   return value;
 }
 
@@ -67,7 +71,12 @@ async function main() {
   }
 
   const [icsResponse, jiraItems, previousFile] = await Promise.all([
-    fetch(icsUrl),
+    fetch(icsUrl, {
+      headers: {
+        Accept: 'text/calendar, text/plain;q=0.9, */*;q=0.8',
+        'User-Agent': 'DeadlineTracker/1.0',
+      },
+    }),
     fetchJiraItems(jiraDomain, jiraEmail, jiraToken),
     readDeadlines(githubToken, repository),
   ]);
