@@ -1,6 +1,6 @@
 # Deadline Tracker
 
-Dashboard cục bộ theo dõi hạn CITD-Elearning và Jira. Windows Task Scheduler chạy đồng bộ mỗi ngày lúc 22:30; nút trên dashboard cũng có thể chạy đồng bộ ngay trên máy.
+Dashboard theo dõi hạn CITD-Elearning và Jira. Máy chủ Vercel bị Cloudflare của CITD chặn khi tải ICS, vì vậy Windows Task Scheduler chạy worker hằng ngày lúc 22:30 từ máy đang truy cập được CITD. Nút trên dashboard cục bộ cũng chạy đồng bộ ngay trên máy.
 
 Yêu cầu Node.js 26 trở lên.
 
@@ -31,6 +31,8 @@ Máy chủ chỉ bind vào loopback `127.0.0.1`. Token cục bộ chỉ được
    - **Add arguments**: `src\sync.js`
    - **Start in**: đường dẫn thư mục repository tracker.
 5. Lưu task, bấm chuột phải vào task và chọn **Run** để thử đồng bộ ngay.
+
+Task cần chạy khi máy có mạng và người dùng Windows đã đăng nhập. Nếu laptop tắt hoặc ngủ đúng giờ, bật **Run task as soon as possible after a scheduled start is missed** và **Wake the computer to run this task**. Sau mỗi lần chạy, worker ghi dữ liệu mới vào `data/deadlines.json` trên Private GitHub repository; dashboard Vercel đọc dữ liệu mới từ repository này. Nút quét trên website Vercel không tải được ICS khi Cloudflare chặn request từ Vercel.
 
 Nút **Quét dữ liệu ngay** chạy cùng worker cục bộ. Sau khi worker cập nhật file trong Private repository, dashboard đọc dữ liệu mới từ repository đó.
 

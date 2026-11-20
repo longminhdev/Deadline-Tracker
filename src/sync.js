@@ -81,13 +81,13 @@ export async function syncNow() {
     fetchJiraItems(jiraDomain, jiraEmail, jiraToken),
     readDeadlines(githubToken, repository),
   ]);
-  // if (!icsResponse.ok) {
-  //   throw new Error(`Không tải được lịch CITD (HTTP ${icsResponse.status}). Kiểm tra secret CITD_ICS_URL.`);
-  // }
 
   if (!icsResponse.ok) {
-    const body = (await icsResponse.text()).slice(0, 300);
-    console.error('Server:', icsResponse.headers.get('server'), '| Body:', body);
+    const server = icsResponse.headers.get('server') || 'không rõ';
+    console.error(`CITD ICS trả HTTP ${icsResponse.status}; máy chủ nguồn: ${server}.`);
+    if (icsResponse.status === 403 && /cloudflare/i.test(server)) {
+      throw new Error('Cloudflare của CITD đang chặn yêu cầu từ máy chủ Vercel. Hãy đồng bộ từ máy tính đang truy cập được CITD.');
+    }
     throw new Error(`Không tải được lịch CITD (HTTP ${icsResponse.status}).`);
   }
 
