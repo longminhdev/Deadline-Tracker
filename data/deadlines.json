@@ -1,17 +1,6 @@
 {
-  "updated_at": "2026-11-23T02:34:56.967Z",
+  "updated_at": "2026-11-23T15:30:03.434Z",
   "items": [
-    {
-      "id": "citd_29201@elearning.citd.edu.vn",
-      "source": "CITD",
-      "group": "MA004.G12.LT.CNTT",
-      "course_name": "Cấu trúc rời rạc",
-      "instructor": "Nguyễn Văn Hợi",
-      "title": "điểm danh buổi 4 tới hạn",
-      "due_at": "2026-11-18T13:50:00.000Z",
-      "submitted_at": "2026-11-19T08:14:29.371Z",
-      "url": "https://elearning.citd.edu.vn/my/"
-    },
     {
       "id": "citd_29225@elearning.citd.edu.vn",
       "source": "CITD",
