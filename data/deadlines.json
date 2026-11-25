@@ -1,17 +1,6 @@
 {
-  "updated_at": "2026-11-24T15:30:02.430Z",
+  "updated_at": "2026-11-25T15:30:03.082Z",
   "items": [
-    {
-      "id": "citd_29225@elearning.citd.edu.vn",
-      "source": "CITD",
-      "group": "IE105.G12.LT.CNTT",
-      "course_name": "Nhập môn bảo đảm và an ninh thông tin",
-      "instructor": "Tô Nguyễn Nhật Quang",
-      "title": "Bài thực hành 2B (deadline 1: 22g00p, deadline 2: 23g59p) tới hạn",
-      "due_at": "2026-11-20T15:00:00.000Z",
-      "submitted_at": "2026-11-22T12:10:47.710Z",
-      "url": "https://elearning.citd.edu.vn/my/"
-    },
     {
       "id": "citd_29165@elearning.citd.edu.vn",
       "source": "CITD",
@@ -32,6 +21,17 @@
       "title": "Buổi 4 - Code - Học tối Thứ 3 ngày 17/11/2026 tới hạn",
       "due_at": "2026-11-23T14:00:00.000Z",
       "submitted_at": "2026-11-24T03:33:55.317Z",
+      "url": "https://elearning.citd.edu.vn/my/"
+    },
+    {
+      "id": "citd_29417@elearning.citd.edu.vn",
+      "source": "CITD",
+      "group": "MA004.G12.LT.CNTT",
+      "course_name": "Cấu trúc rời rạc",
+      "instructor": "Nguyễn Văn Hợi",
+      "title": "Điểm danh buổi 5 tới hạn",
+      "due_at": "2026-11-25T14:40:00.000Z",
+      "submitted_at": null,
       "url": "https://elearning.citd.edu.vn/my/"
     },
     {
