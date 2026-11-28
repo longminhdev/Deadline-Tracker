@@ -1,28 +1,6 @@
 {
-  "updated_at": "2026-11-27T15:30:03.035Z",
+  "updated_at": "2026-11-28T15:30:03.412Z",
   "items": [
-    {
-      "id": "citd_29165@elearning.citd.edu.vn",
-      "source": "CITD",
-      "group": "IT003.G12.LT.CNTT",
-      "course_name": "Cấu trúc dữ liệu và giải thuật",
-      "instructor": "Phạm Thế Sơn",
-      "title": "Buổi 4 - Bài tập tuần - Học tối Thứ 3 ngày 17/11/2026 (Liên kết đơn QLSV) tới hạn",
-      "due_at": "2026-11-23T13:00:00.000Z",
-      "submitted_at": "2026-11-23T15:58:08.661Z",
-      "url": "https://elearning.citd.edu.vn/my/"
-    },
-    {
-      "id": "citd_29162@elearning.citd.edu.vn",
-      "source": "CITD",
-      "group": "IT003.G12.LT.CNTT",
-      "course_name": "Cấu trúc dữ liệu và giải thuật",
-      "instructor": "Phạm Thế Sơn",
-      "title": "Buổi 4 - Code - Học tối Thứ 3 ngày 17/11/2026 tới hạn",
-      "due_at": "2026-11-23T14:00:00.000Z",
-      "submitted_at": "2026-11-24T03:33:55.317Z",
-      "url": "https://elearning.citd.edu.vn/my/"
-    },
     {
       "id": "citd_29417@elearning.citd.edu.vn",
       "source": "CITD",
